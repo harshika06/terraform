@@ -27,9 +27,9 @@ jobs:
       - name: Set up AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Set in GitHub Secrets
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # Set in GitHub Secrets
-          aws_region: us-east-1  # Set your desired AWS region
+          aws-acces-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Set in GitHub Secrets
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # Set in GitHub Secrets
+          aws-region: us-east-1  # Set your desired AWS region
 
       # Step 4: Initialize Terraform (run terraform init)
       - name: Terraform Init
