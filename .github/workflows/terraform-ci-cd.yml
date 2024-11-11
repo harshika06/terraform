@@ -1,0 +1,46 @@
+name: Terraform CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - master    # Trigger on pushes to the master branch
+  pull_request:
+    branches:
+      - master    # Trigger on pull requests targeting the master branch
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu image to run the jobs
+
+    steps:
+      # Step 1: Check out the code from the repository
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Step 2: Set up Terraform (use the Terraform version you want)
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: '1.5.0'  # You can change the version if necessary
+
+      # Step 3: Set up AWS credentials (via GitHub Secrets)
+      - name: Set up AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Set in GitHub Secrets
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # Set in GitHub Secrets
+          aws_region: us-east-1  # Set your desired AWS region
+
+      # Step 4: Initialize Terraform (run terraform init)
+      - name: Terraform Init
+        run: terraform init
+
+      # Step 5: Run Terraform Plan (check for changes)
+      - name: Terraform Plan
+        run: terraform plan
+
+      # Step 6: Apply the Terraform configuration (provision resources)
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+        if: github.ref == 'refs/heads/master'  # Only run on push to master
+
